@@ -9,39 +9,39 @@ class VideoInfo:
 
     @property
     def frame_width(self):
-        return int(self._video_info["width"])
+        return int(self.video_info["width"])
 
     @property
     def frame_height(self):
-        return int(self._video_info["height"])
+        return int(self.video_info["height"])
 
     @property
     def pix_fmt(self):
-        return int(self._video_info["pix_fmt"])
+        return int(self.video_info["pix_fmt"])
 
     @property
     def codec_name(self):
-        return int(self._video_info["codec_name"])
+        return int(self.video_info["codec_name"])
 
     @property
     def codec_long_name(self):
-        return int(self._video_info["codec_long_name"])
+        return int(self.video_info["codec_long_name"])
 
     @property
     def avg_frame_rate(self):
-        return int(self._video_info["avg_frame_rate"])
+        return int(self.video_info["avg_frame_rate"])
 
     @property
     def bit_rate(self):
-        return int(self._video_info["bit_rate"])
+        return int(self.video_info["bit_rate"])
 
     @property
     def nb_frames(self):
-        return int(self._video_info["nb_frames"])
+        return int(self.video_info["nb_frames"])
 
     @property
     def video_path(self):
-        return self._video_path
+        return self.video_info
 
 
 __all__ = [VideoInfo.__name__]
