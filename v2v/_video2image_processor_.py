@@ -38,6 +38,8 @@ class Video2ImageProcessor:
             if frame is None:
                 break
             yield FrameData(frame_id=_frame_id, frame=frame)
+        processor.stdout.close()
+        processor.kill()
         processor.wait()
 
     def create_stream(self) -> Generator[FrameData, None, None]:
