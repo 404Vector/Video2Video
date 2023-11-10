@@ -1,5 +1,5 @@
 import subprocess
-from typing import Any, Dict, Literal, Union
+from typing import Any, Dict, Literal, Optional, Union
 import numpy as np
 import ffmpeg
 
@@ -22,13 +22,38 @@ def get_video_info_from_path(video_path: str) -> dict:
     return video_info
 
 
-def create_vi2_process(video_path: str) -> subprocess.Popen:
+def create_v2i_process(
+    video_path: str,
+    ffmpeg_options_output: Optional[dict] = None,
+) -> subprocess.Popen:
     output_kwargs: Dict[str, str] = {
         "format": "rawvideo",
         "pix_fmt": "rgb24",
     }
+    if ffmpeg_options_output is not None:
+        output_kwargs.update(ffmpeg_options_output)
     args = ffmpeg.input(video_path).output("pipe:", **output_kwargs).compile()
     return subprocess.Popen(args, stdout=subprocess.PIPE)
+
+
+def create_v2a_process(
+    video_path: str,
+    dst_audio_path: str,
+    ffmpeg_options_output: Optional[dict] = None,
+) -> subprocess.Popen:
+    output_kwargs: Dict[str, str] = {
+        "vn": None,
+        "c:a": "copy",
+    }
+    if ffmpeg_options_output is not None:
+        output_kwargs.update(ffmpeg_options_output)
+    args = (
+        ffmpeg.input(video_path)
+        .output(dst_audio_path, **output_kwargs)
+        .overwrite_output()
+        .compile()
+    )
+    return subprocess.Popen(args)
 
 
 def create_i2v_process(
@@ -37,7 +62,9 @@ def create_i2v_process(
     fps: Union[str, float, int],
     pix_fmt: str,
     video_bitrate: int,
-    format: Literal["h264", "h265"],
+    vcodec: Literal["libx264", "libx265"],
+    ffmpeg_options_input: Optional[dict] = None,
+    ffmpeg_options_output: Optional[dict] = None,
 ) -> subprocess.Popen:
     input_kwargs: Dict[str, str] = {
         "format": "rawvideo",
@@ -46,10 +73,14 @@ def create_i2v_process(
         "framerate": str(fps),
     }
     output_kwargs: Dict[str, str] = {
-        "format": format,
+        "vcodec": vcodec,
         "pix_fmt": pix_fmt,
         "video_bitrate": video_bitrate,
     }
+    if ffmpeg_options_input is not None:
+        input_kwargs.update(ffmpeg_options_input)
+    if ffmpeg_options_output is not None:
+        output_kwargs.update(ffmpeg_options_output)
     pargs = (
         ffmpeg.input("pipe:", **input_kwargs)
         .output("pipe:", **output_kwargs)
@@ -62,5 +93,6 @@ def create_i2v_process(
 __all__ = [
     read_frame_from_process.__name__,
     get_video_info_from_path.__name__,
-    create_vi2_process.__name__,
+    create_v2i_process.__name__,
+    create_v2a_process.__name__,
 ]
