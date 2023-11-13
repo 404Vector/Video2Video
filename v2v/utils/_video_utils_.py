@@ -61,9 +61,6 @@ def create_i2v_process(
     width: int,
     height: int,
     fps: Union[str, float, int],
-    pix_fmt: str,
-    video_bitrate: int,
-    vcodec: Literal["libx264", "libx265"],
     ffmpeg_options_input: Optional[dict] = None,
     ffmpeg_options_output: Optional[dict] = None,
 ) -> subprocess.Popen:
@@ -73,11 +70,7 @@ def create_i2v_process(
         "s": f"{width}x{height}",
         "framerate": str(fps),
     }
-    output_kwargs: Dict[str, str] = {
-        "vcodec": vcodec,
-        "pix_fmt": pix_fmt,
-        "video_bitrate": video_bitrate,
-    }
+    output_kwargs: Dict[str, str] = {}
     if ffmpeg_options_input is not None:
         input_kwargs.update(ffmpeg_options_input)
     if ffmpeg_options_output is not None:
@@ -88,7 +81,7 @@ def create_i2v_process(
         .overwrite_output()
         .compile()
     )
-    return subprocess.Popen(pargs, stdin=subprocess.PIPE, stdout=subprocess.PIPE)
+    return subprocess.Popen(pargs, stdin=subprocess.PIPE)
 
 
 __all__ = [
@@ -96,4 +89,5 @@ __all__ = [
     get_video_info_from_path.__name__,
     create_v2i_process.__name__,
     create_v2a_process.__name__,
+    create_i2v_process.__name__,
 ]
