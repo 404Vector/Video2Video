@@ -1,4 +1,3 @@
-import subprocess
 from typing import Generator, Optional
 from v2v.datastruct import FrameData, VideoInfo
 from v2v.utils import (
