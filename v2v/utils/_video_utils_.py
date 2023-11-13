@@ -57,6 +57,7 @@ def create_v2a_process(
 
 
 def create_i2v_process(
+    dst_video_path: str,
     width: int,
     height: int,
     fps: Union[str, float, int],
@@ -83,7 +84,7 @@ def create_i2v_process(
         output_kwargs.update(ffmpeg_options_output)
     pargs = (
         ffmpeg.input("pipe:", **input_kwargs)
-        .output("pipe:", **output_kwargs)
+        .output(dst_video_path, **output_kwargs)
         .overwrite_output()
         .compile()
     )
