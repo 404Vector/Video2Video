@@ -29,7 +29,13 @@ class VideoInfo:
 
     @property
     def avg_frame_rate(self):
-        return int(self.video_info["avg_frame_rate"])
+        fps_str: str = self.video_info["avg_frame_rate"]
+
+        return (
+            float(fps_str.split("/")[0]) / float(fps_str.split("/")[1])
+            if "/" in fps_str
+            else float(fps_str)
+        )
 
     @property
     def bit_rate(self):
