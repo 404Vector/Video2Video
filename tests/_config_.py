@@ -70,19 +70,18 @@ test_i2v2i = {
 
 
 test_v2i2v = {
-    "v2i": {
-        "test_video_url": TEST_VIDEO_URL,
-        "ffmpeg_options_output": {
-            # trim 3 frames from source
-            "ss": "00:01:00",
-            "t": "00:00:00.1",
-        },
+    "test_video_url": TEST_VIDEO_URL,
+    "dst_video_path": os.path.join(PROJECT_DIR, "_TEMP_VIDEO_FOR_TEST_.mov"),
+    "dst_audio_path": os.path.join(PROJECT_DIR, "_TEMP_AUDIO_FOR_TEST_.m4a"),
+    "dst_video_audio_path": os.path.join(PROJECT_DIR, "_TEMP_VIDEO_FOR_TEST_.mp4"),
+    "v2i_ffmpeg_options_output": {
+        "ss": "00:01:00",
+        "t": "00:00:11.1",
     },
-    "i2v": {
-        "dst_video_path": os.path.join(PROJECT_DIR, "_TEMP_VIDEO_FOR_TEST_.mov"),
-        "ffmpeg_options_input": {},
-        "ffmpeg_options_output": {
-            "b:v": 15000,
-        },
+    "v2a_ffmpeg_options_output": {
+        "ss": "00:01:00",
+        "t": "00:00:11.1",
     },
+    "i2v_ffmpeg_options_input": {},
+    "i2v_ffmpeg_options_output": {},
 }
