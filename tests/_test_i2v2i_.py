@@ -17,7 +17,7 @@ class TestI2V2I(unittest.TestCase):
         모든 unittest 직후에 이 메서드가 호출됩니다.
         """
 
-    def test_encode_frames(self):
+    def test_i2v2i(self):
         width = config.test_i2v2i["test_video_width"]
         height = config.test_i2v2i["test_video_height"]
         fps = config.test_i2v2i["test_video_fps"]
