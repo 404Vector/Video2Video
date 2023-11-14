@@ -22,6 +22,3 @@ class TestVideo2ImageProcessor(unittest.TestCase):
         image_stream = v2ip.create_stream()
         for fid, frame_data in enumerate(image_stream):
             self.assertEqual(fid, frame_data.frame_id)
-            print(
-                f"{TestVideo2ImageProcessor.__name__}::fid={fid} == frame_id={frame_data.frame_id} | uuid = {frame_data.uuid}"
-            )
