@@ -25,6 +25,7 @@ def get_video_info_from_path(video_path: str) -> dict:
 def create_v2i_process(
     video_path: str,
     ffmpeg_options_output: Optional[dict] = None,
+    ffmpeg_log_level: str = "warning",
 ) -> subprocess.Popen:
     output_kwargs: Dict[str, str] = {
         "format": "rawvideo",
@@ -32,7 +33,15 @@ def create_v2i_process(
     }
     if ffmpeg_options_output is not None:
         output_kwargs.update(ffmpeg_options_output)
-    args = ffmpeg.input(video_path).output("pipe:", **output_kwargs).compile()
+    args = (
+        ffmpeg.input(video_path)
+        .output(
+            "pipe:",
+            loglevel=ffmpeg_log_level,
+            **output_kwargs,
+        )
+        .compile()
+    )
     return subprocess.Popen(args, stdout=subprocess.PIPE)
 
 
@@ -40,6 +49,7 @@ def create_v2a_process(
     video_path: str,
     dst_audio_path: str,
     ffmpeg_options_output: Optional[dict] = None,
+    ffmpeg_log_level: str = "warning",
 ) -> subprocess.Popen:
     output_kwargs: Dict[str, str] = {
         "vn": None,
@@ -49,7 +59,11 @@ def create_v2a_process(
         output_kwargs.update(ffmpeg_options_output)
     args = (
         ffmpeg.input(video_path)
-        .output(dst_audio_path, **output_kwargs)
+        .output(
+            dst_audio_path,
+            loglevel=ffmpeg_log_level,
+            **output_kwargs,
+        )
         .overwrite_output()
         .compile()
     )
@@ -63,6 +77,7 @@ def create_i2v_process(
     fps: Union[str, float, int],
     ffmpeg_options_input: Optional[dict] = None,
     ffmpeg_options_output: Optional[dict] = None,
+    ffmpeg_log_level: str = "warning",
 ) -> subprocess.Popen:
     input_kwargs: Dict[str, str] = {
         "format": "rawvideo",
@@ -76,8 +91,15 @@ def create_i2v_process(
     if ffmpeg_options_output is not None:
         output_kwargs.update(ffmpeg_options_output)
     pargs = (
-        ffmpeg.input("pipe:", **input_kwargs)
-        .output(dst_video_path, **output_kwargs)
+        ffmpeg.input(
+            "pipe:",
+            **input_kwargs,
+        )
+        .output(
+            dst_video_path,
+            loglevel=ffmpeg_log_level,
+            **output_kwargs,
+        )
         .overwrite_output()
         .compile()
     )
