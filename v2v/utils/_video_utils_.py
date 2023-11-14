@@ -70,6 +70,34 @@ def create_v2a_process(
     return subprocess.Popen(args)
 
 
+def create_va2v_process(
+    video_path: str,
+    audio_path: str,
+    dst_video_path: str,
+    ffmpeg_options_output: Optional[dict] = None,
+    ffmpeg_log_level: str = "warning",
+) -> subprocess.Popen:
+    output_kwargs: Dict[str, str] = {}
+    if ffmpeg_options_output is not None:
+        output_kwargs.update(ffmpeg_options_output)
+    args = (
+        ffmpeg.concat(
+            ffmpeg.input(video_path),
+            ffmpeg.input(audio_path),
+            v=1,
+            a=1,
+        )
+        .output(
+            dst_video_path,
+            loglevel=ffmpeg_log_level,
+            **output_kwargs,
+        )
+        .overwrite_output()
+        .compile()
+    )
+    return subprocess.Popen(args)
+
+
 def create_i2v_process(
     dst_video_path: str,
     width: int,
@@ -112,4 +140,5 @@ __all__ = [
     create_v2i_process.__name__,
     create_v2a_process.__name__,
     create_i2v_process.__name__,
+    create_va2v_process.__name__,
 ]

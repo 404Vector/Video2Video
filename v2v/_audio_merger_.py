@@ -3,33 +3,36 @@ from typing import Optional
 from v2v.datastruct import VideoInfo
 from v2v.utils import (
     get_video_info_from_path,
-    create_v2a_process,
+    create_va2v_process,
     create_uuid,
 )
 
 
-class AudioExtractor:
+class AudioMerger:
     def __init__(
         self,
         video_path: str,
-        dst_audio_path: str,
+        audio_path: str,
+        dst_video_path: str,
         ffmpeg_options_output: Optional[dict] = None,
     ):
         self._id = create_uuid()
         self._video_path = video_path
-        self._dst_audio_path = dst_audio_path
+        self._audio_path = audio_path
+        self._dst_video_path = dst_video_path
         self._video_info = VideoInfo(get_video_info_from_path(video_path=video_path))
         self._ffmpeg_options_output = ffmpeg_options_output
 
     def run(self):
         video_info = self.video_info
         video_path = self.video_path
-        dst_audio_path = self.dst_audio_path
-        info = video_info
+        audio_path = self.audio_path
+        dst_video_path = self.dst_video_path
         ffmpeg_options_output = self._ffmpeg_options_output
-        processor = create_v2a_process(
+        processor = create_va2v_process(
             video_path=video_path,
-            dst_audio_path=dst_audio_path,
+            audio_path=audio_path,
+            dst_video_path=dst_video_path,
             ffmpeg_options_output=ffmpeg_options_output,
         )
         assert processor is not None
@@ -51,8 +54,12 @@ class AudioExtractor:
         return self._video_path
 
     @property
-    def dst_audio_path(self) -> str:
-        return self._dst_audio_path
+    def audio_path(self) -> str:
+        return self._audio_path
+
+    @property
+    def dst_video_path(self) -> str:
+        return self._dst_video_path
 
 
-__all__ = [AudioExtractor.__name__]
+__all__ = [AudioMerger.__name__]
