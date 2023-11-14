@@ -28,11 +28,16 @@ test_v2ap = {
     "test_video_url": TEST_VIDEO_URL,
     "ffmpeg_options_output": None,
     "dst_audio_path": os.path.join(PROJECT_DIR, "_TEMP_AUDIO_FOR_TEST_.m4a"),
+    "ffmpeg_options_output": {
+        # trim 3 frames from source
+        "ss": "00:01:00",
+        "t": "00:00:00.1",
+    },
 }
 
 test_i2vp = {
-    "test_video_width": 640,
-    "test_video_height": 480,
+    "test_video_width": 64,
+    "test_video_height": 64,
     "test_video_fps": 20,
     "test_video_color_sequence": [
         (r, g, b)
@@ -46,4 +51,19 @@ test_i2vp = {
         "pix_fmt": v2v.FFMPEG_PIX_FMT_YUV420P,
         "b:v": 15000,
     },
+}
+
+test_i2v2i = {
+    "test_video_width": 64,
+    "test_video_height": 64,
+    "test_video_fps": 1,
+    "test_video_color_sequence": [
+        (r, g, b)
+        for r in range(0, 257, 128)
+        for g in range(0, 257, 128)
+        for b in range(0, 257, 128)
+    ],
+    "dst_video_path": os.path.join(PROJECT_DIR, "_TEMP_VIDEO_FOR_TEST_.mov"),
+    "ffmpeg_options_input": {},
+    "ffmpeg_options_output": {},
 }
