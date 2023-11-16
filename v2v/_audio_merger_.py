@@ -38,9 +38,6 @@ class AudioMerger:
         assert processor is not None
         processor.wait()
 
-    def async_run(self):
-        return asyncio.wait_for(self.run(), None)
-
     @property
     def id(self) -> str:
         return self._id
