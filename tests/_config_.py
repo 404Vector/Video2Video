@@ -76,12 +76,30 @@ test_v2i2v = {
     "dst_video_audio_path": os.path.join(PROJECT_DIR, "_TEMP_VIDEO_FOR_TEST_.mp4"),
     "v2i_ffmpeg_options_output": {
         "ss": "00:01:00",
-        "t": "00:00:11.1",
+        "t": "00:00:01.1",
     },
     "v2a_ffmpeg_options_output": {
         "ss": "00:01:00",
-        "t": "00:00:11.1",
+        "t": "00:00:01.1",
     },
     "i2v_ffmpeg_options_input": {},
     "i2v_ffmpeg_options_output": {},
+}
+
+test_v2v = {
+    "test_video_url": TEST_VIDEO_URL,
+    "dst_video_audio_path": os.path.join(
+        PROJECT_DIR, "_TEMP_VIDEO_AUDIO_FOR_TEST_.mov"
+    ),
+    "v2i_ffmpeg_options_output": {
+        "ss": "00:01:00",
+        "t": "00:00:01.1",
+    },
+    "v2a_ffmpeg_options_output": {
+        "ss": "00:01:00",
+        "t": "00:00:01.1",
+    },
+    "i2v_ffmpeg_options_input": {},
+    "i2v_ffmpeg_options_output": {},
+    "va2v_ffmpeg_options_output": {},
 }

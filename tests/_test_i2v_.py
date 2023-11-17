@@ -1,3 +1,4 @@
+import asyncio
 import os
 import unittest
 from v2v import Image2VideoProcessor
@@ -26,22 +27,20 @@ class TestImage2VideoProcessor(unittest.TestCase):
             FrameData(fid, (np.ones((height, width, 3)) * c).astype(np.uint8))
             for fid, c in enumerate(colors)
         ]
+        frame_datas.append(FrameData(-1, None))  # end of the frame
         i2vp = Image2VideoProcessor(
             dst_video_path=config.test_i2vp["dst_video_path"],
-            nb_frames=len(frame_datas),
             width=width,
             height=height,
             fps=fps,
             ffmpeg_options_input=config.test_i2vp["ffmpeg_options_input"],
             ffmpeg_options_output=config.test_i2vp["ffmpeg_options_output"],
         )
-        image_stream = i2vp.create_stream()
-        try:
-            for fid, frame_data in enumerate(frame_datas):
-                self.assertEqual(fid, frame_data.frame_id)
-                image_stream.send(frame_data)
-        except StopIteration:
-            pass
+        while True:
+            frame_data = frame_datas.pop(0)
+            asyncio.run(i2vp(frame_data))
+            if frame_data.frame is None and frame_data.frame_id == -1:
+                break
         self.assertEqual(
             os.path.exists(i2vp.dst_video_path),
             True,
@@ -53,3 +52,4 @@ class TestImage2VideoProcessor(unittest.TestCase):
             False,
             f"{i2vp.dst_video_path} is not deleted!",
         )
+        return

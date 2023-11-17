@@ -1,3 +1,4 @@
+import asyncio
 import unittest
 from v2v import Video2ImageProcessor
 from . import _config_ as config
@@ -19,6 +20,11 @@ class TestVideo2ImageProcessor(unittest.TestCase):
             video_path=config.test_v2ip["test_video_url"],
             ffmpeg_options_output=config.test_v2ip["ffmpeg_options_output"],
         )
-        image_stream = v2ip.create_stream()
-        for fid, frame_data in enumerate(image_stream):
-            self.assertEqual(fid, frame_data.frame_id)
+
+        progress = 0
+        while True:
+            frame_data = asyncio.run(v2ip())
+            if frame_data.frame is None and frame_data.frame_id == -1:
+                break
+            self.assertEqual(progress, frame_data.frame_id)
+            progress += 1
