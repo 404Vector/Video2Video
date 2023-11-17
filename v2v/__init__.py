@@ -7,3 +7,5 @@ from ._audio_merger_ import *
 from ._const_ import *
 from .interface import *
 from ._frame_organizer_ import *
+from ._null_frame_processor_ import *
+from ._null_frame_processor_pool_ import *
