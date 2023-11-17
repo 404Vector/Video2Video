@@ -9,7 +9,7 @@ class FrameOrganizer:
         self,
         input_queue_size: int = 60,
         output_queue_size: int = 60,
-        skip_delay: float = 100,
+        skip_delay: float = 0.1,
     ):
         assert skip_delay > 0
         assert input_queue_size > 0
