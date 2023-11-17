@@ -1,3 +1,4 @@
+import asyncio
 import os
 import unittest
 
@@ -22,7 +23,12 @@ class TestVideo2Image2VideoProcessor(unittest.TestCase):
             video_path=config.test_v2i2v["test_video_url"],
             ffmpeg_options_output=config.test_v2i2v["v2i_ffmpeg_options_output"],
         )
-        frames = [_f for _f in v2ip.create_stream()]
+        frames = []
+        while True:
+            frame = asyncio.run(v2ip())
+            frames.append(frame)
+            if frame.frame is None and frame.frame_id == -1:
+                break
 
         v2ap = AudioExtractor(
             video_path=config.test_v2i2v["test_video_url"],
@@ -33,23 +39,24 @@ class TestVideo2Image2VideoProcessor(unittest.TestCase):
 
         i2vp = Image2VideoProcessor(
             dst_video_path=config.test_v2i2v["dst_video_path"],
-            nb_frames=len(frames),
             width=v2ip.video_info.frame_width,
             height=v2ip.video_info.frame_height,
             fps=v2ip.video_info.avg_frame_rate,
             ffmpeg_options_input=config.test_v2i2v["i2v_ffmpeg_options_input"],
             ffmpeg_options_output=config.test_v2i2v["i2v_ffmpeg_options_output"],
         )
-        input_stream = i2vp.create_stream()
         try:
-            for fid, frame_data in enumerate(frames):
-                self.assertEqual(fid, frame_data.frame_id)
+            while True:
+                frame_data = frames.pop(0)
                 image = frame_data.frame
-                image = np.clip(
-                    (image.astype(np.int32) - 32) * (128.0 / (128 - 32)), 0, 255
-                )
-                frame_data.frame = image
-                input_stream.send(frame_data)
+                if frame_data.frame is not None:
+                    image = np.clip(
+                        (image.astype(np.int32) - 32) * (128.0 / (128 - 32)), 0, 255
+                    )
+                    frame_data.frame = image
+                asyncio.run(i2vp(frame_data=frame_data))
+                if frame_data.frame is None and frame_data.frame_id == -1:
+                    break
         except StopIteration:
             pass
         va2vp = AudioMerger(
