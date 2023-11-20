@@ -1,8 +1,8 @@
 import asyncio
 import functools
 from typing import Any, Generator, Optional, Union
-from v2v.datastruct import FrameData, VideoInfo
-from v2v.utils import (
+from .datastruct import FrameData, VideoInfo
+from .utils import (
     read_frame_from_process,
     get_video_info_from_path,
     create_v2i_process,

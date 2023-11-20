@@ -1,5 +1,5 @@
 from typing import Dict
-from v2v import FrameData
+from . import FrameData
 import asyncio
 from asyncio import Queue
 

@@ -1,7 +1,7 @@
 import asyncio
 from typing import Optional
-from v2v.datastruct import VideoInfo
-from v2v.utils import (
+from .datastruct import VideoInfo
+from .utils import (
     get_video_info_from_path,
     create_v2a_process,
     create_uuid,

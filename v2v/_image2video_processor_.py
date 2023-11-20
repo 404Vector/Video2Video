@@ -3,8 +3,8 @@ import functools
 from typing import Any, Generator, Literal, Optional, Union
 
 import numpy as np
-from v2v.datastruct import FrameData
-from v2v.utils import (
+from .datastruct import FrameData
+from .utils import (
     create_i2v_process,
     create_uuid,
 )

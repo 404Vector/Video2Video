@@ -1,6 +1,6 @@
 from abc import ABCMeta, abstractmethod
 from typing import Generic, TypeVar
-from v2v.utils import create_uuid
+from ..utils import create_uuid
 
 IT = TypeVar("IT")
 OT = TypeVar("OT")

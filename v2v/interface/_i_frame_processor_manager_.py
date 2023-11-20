@@ -1,8 +1,8 @@
 from abc import ABCMeta, abstractmethod
 import asyncio
 from typing import Generic, List, TypeVar
-from v2v.utils import create_uuid
-from v2v import FrameData
+from ..utils import create_uuid
+from ..datastruct import FrameData
 from ._i_frame_processor_ import IFrameProcessor
 
 IT = TypeVar("IT")

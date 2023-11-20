@@ -1,5 +1,5 @@
 from dataclasses import dataclass, field
-from v2v.utils import create_uuid
+from ..utils import create_uuid
 
 
 @dataclass

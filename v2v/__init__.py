@@ -1,3 +1,8 @@
+"""Python package for converting video to video with ffmpeg."""
+import datetime
+
+__version__ = f"0.1.{datetime.datetime.now(datetime.timezone(datetime.timedelta(hours=9))).strftime('%Y.%m.%d.%H.%M.%S')}"
+
 from .datastruct import *
 from .utils import *
 from ._video2image_processor_ import *
