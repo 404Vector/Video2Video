@@ -1,7 +1,7 @@
 from typing import Union
 import numpy as np
 from dataclasses import dataclass, field
-from v2v.utils import create_uuid
+from ..utils import create_uuid
 
 
 @dataclass

@@ -1,7 +1,7 @@
 import asyncio
 from typing import Generic, List, TypeVar
 from .interface import IFrameProcessorPool
-from v2v import FrameData, NullFrameProcessor
+from . import FrameData, NullFrameProcessor
 
 
 IT = TypeVar("IT")

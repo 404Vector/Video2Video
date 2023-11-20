@@ -1,6 +1,6 @@
 import asyncio
 from .interface import IFrameProcessor
-from v2v import FrameData
+from .datastruct import FrameData
 
 
 class NullFrameProcessor(IFrameProcessor[FrameData, FrameData]):

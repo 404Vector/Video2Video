@@ -3,12 +3,12 @@ from asyncio import Queue, Task
 import functools
 import os
 from typing import Generator, Optional, Union
-from v2v.datastruct import VideoInfo, FrameData
-from v2v.utils import (
+from .datastruct import VideoInfo, FrameData
+from .utils import (
     create_uuid,
 )
 
-from v2v import (
+from . import (
     Video2ImageProcessor,
     Image2VideoProcessor,
     AudioExtractor,
