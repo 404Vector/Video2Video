@@ -1,3 +1,5 @@
+import os
+
 """Python package for converting video to video with ffmpeg."""
 
 if "GITHUB_ACTION_TAG_NAME" in os.environ:
