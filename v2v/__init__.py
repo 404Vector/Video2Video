@@ -1,6 +1,13 @@
+"""
+# Video2Video   
+
+Python package for converting video to video with ffmpeg.   
+
+For more information, Visit [the github repository](https://github.com/404Vector/Video2Video)
+ 
+"""
 import os
 
-"""Python package for converting video to video with ffmpeg."""
 
 if "GITHUB_ACTION_TAG_NAME" in os.environ:
     __version__ = os.environ["GITHUB_ACTION_TAG_NAME"]
