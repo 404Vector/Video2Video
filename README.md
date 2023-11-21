@@ -7,7 +7,7 @@
 
 [![Unit Tests](https://github.com/404Vector/Video2Video/actions/workflows/unit_test.yml/badge.svg?branch=main)](https://github.com/404Vector/Video2Video/actions/workflows/unit_test.yml)
 [![Check Format](https://github.com/404Vector/Video2Video/actions/workflows/black-formatter-action.yml/badge.svg?branch=main)](https://github.com/404Vector/Video2Video/actions/workflows/black-formatter-action.yml)
-[![Upload Python Package](https://github.com/404Vector/Video2Video/actions/workflows/python-publish.yml/badge.svg?branch=main)](https://github.com/404Vector/Video2Video/actions/workflows/python-publish.yml)
+[![Publish to PyPi](https://github.com/404Vector/Video2Video/actions/workflows/pypi-publish.yml/badge.svg)](https://github.com/404Vector/Video2Video/actions/workflows/pypi-publish.yml)
 
 
 ## Install
