@@ -34,10 +34,9 @@ jobs:
         GITHUB_ACTION_TAG_NAME: "${{ steps.tag.outputs.TAG_NAME }}"
       run: echo "$GITHUB_ACTION_TAG_NAME"
     - name: Build Package python-version
-      run: build_package_version.py -i v2v/__init__.py
+      run: python build_package_version.py -i v2v/__init__.py
     - name: Install dependencies
       run: |
-        python build_package_version.py -i v2v/__init__.py
         pip install build
     - name: Build package
       run: python -m build
