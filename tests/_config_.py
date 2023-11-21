@@ -13,13 +13,15 @@ PUBLIC_TEST_VIDEO_INFO = {
     "title": "Tears of Steel",
 }
 
-TEST_VIDEO_URL = PUBLIC_TEST_VIDEO_INFO["sources"][-1]
+TEST_VIDEO_URL = os.path.join(
+    PROJECT_DIR, "tests.resources", "SampleVideo_1280x720_1mb.mp4"
+)
 
 test_v2ip = {
     "test_video_url": TEST_VIDEO_URL,
     "ffmpeg_options_output": {
         # trim 3 frames from source
-        "ss": "00:01:00",
+        "ss": "00:00:00",
         "t": "00:00:00.1",
     },
 }
@@ -30,7 +32,7 @@ test_v2ap = {
     "dst_audio_path": os.path.join(PROJECT_DIR, "_TEMP_AUDIO_FOR_TEST_.m4a"),
     "ffmpeg_options_output": {
         # trim 3 frames from source
-        "ss": "00:01:00",
+        "ss": "00:00:00",
         "t": "00:00:00.1",
     },
 }
@@ -75,11 +77,11 @@ test_v2i2v = {
     "dst_audio_path": os.path.join(PROJECT_DIR, "_TEMP_AUDIO_FOR_TEST_.m4a"),
     "dst_video_audio_path": os.path.join(PROJECT_DIR, "_TEMP_VIDEO_FOR_TEST_.mp4"),
     "v2i_ffmpeg_options_output": {
-        "ss": "00:01:00",
+        "ss": "00:00:00",
         "t": "00:00:01.1",
     },
     "v2a_ffmpeg_options_output": {
-        "ss": "00:01:00",
+        "ss": "00:00:00",
         "t": "00:00:01.1",
     },
     "i2v_ffmpeg_options_input": {},
@@ -92,12 +94,12 @@ test_v2v = {
         PROJECT_DIR, "_TEMP_VIDEO_AUDIO_FOR_TEST_.mov"
     ),
     "v2i_ffmpeg_options_output": {
-        "ss": "00:01:00",
-        "t": "00:00:01.1",
+        "ss": "00:00:00",
+        "t": "00:00:01",
     },
     "v2a_ffmpeg_options_output": {
-        "ss": "00:01:00",
-        "t": "00:00:01.1",
+        "ss": "00:00:00",
+        "t": "00:00:01",
     },
     "i2v_ffmpeg_options_input": {},
     "i2v_ffmpeg_options_output": {},
