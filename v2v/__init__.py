@@ -1,7 +1,13 @@
-"""Python package for converting video to video with ffmpeg."""
-import datetime
+import os
 
-__version__ = f"0.1.{datetime.datetime.now(datetime.timezone(datetime.timedelta(hours=9))).strftime('%Y.%m.%d.%H.%M.%S')}"
+"""Python package for converting video to video with ffmpeg."""
+
+if "GITHUB_ACTION_TAG_NAME" in os.environ:
+    __version__ = os.environ["GITHUB_ACTION_TAG_NAME"]
+else:
+    import datetime
+
+    __version__ = f"0.0.{datetime.datetime.now(datetime.timezone(datetime.timedelta(hours=9))).strftime('%Y.%m.%d.%H.%M.%S')}"
 
 from .datastruct import *
 from .utils import *
