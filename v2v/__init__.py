@@ -6,15 +6,8 @@ Python package for converting video to video with ffmpeg.
 For more information, Visit [the github repository](https://github.com/404Vector/Video2Video)
  
 """
-import os
 
-
-if "GITHUB_ACTION_TAG_NAME" in os.environ:
-    __version__ = os.environ["GITHUB_ACTION_TAG_NAME"]
-else:
-    import datetime
-
-    __version__ = f"0.0.{datetime.datetime.now(datetime.timezone(datetime.timedelta(hours=9))).strftime('%Y.%m.%d.%H.%M.%S')}"
+__version__ = "0.0.0"  # dynamic
 
 from .datastruct import *
 from .utils import *

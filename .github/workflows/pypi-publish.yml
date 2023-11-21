@@ -6,7 +6,7 @@
 # separate terms of service, privacy policy, and support
 # documentation.
 
-name: Upload Python Package
+name: Publish to PyPi 
 
 on:
   release:
@@ -33,6 +33,8 @@ jobs:
       env:
         GITHUB_ACTION_TAG_NAME: "${{ steps.tag.outputs.TAG_NAME }}"
       run: echo "$GITHUB_ACTION_TAG_NAME"
+    - name: Build Package python-version
+      run: build_package_version.py -i v2v/__init__.py
     - name: Install dependencies
       run: |
         python -m pip install --upgrade pip
