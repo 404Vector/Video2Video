@@ -8,12 +8,11 @@ authors = [{name = "404Vector", email = "tiryul@gmail.com"}]
 readme = "README.md"
 license = {file = "LICENSE"}
 classifiers = ["License :: OSI Approved :: MIT License"]
-dynamic = ["version", "description"]
+dynamic = ["version", "description", "dependencies"]
 requires-python = ">=3.9"
-dependencies = [
-  "ffmpeg-python",
-  "numpy",
-]
+
+[tool.setuptools.dynamic]
+dependencies = {file = ["requirements.txt"]}
 
 [project.urls]
 Home = "https://github.com/404Vector/Video2Video"
