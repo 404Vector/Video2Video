@@ -13,6 +13,7 @@ requires-python = ">=3.9"
 
 [tool.setuptools.dynamic]
 dependencies = {file = ["requirements.txt"]}
+description = {file = ["README.md"]}
 
 [project.urls]
 Home = "https://github.com/404Vector/Video2Video"
