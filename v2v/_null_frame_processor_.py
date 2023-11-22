@@ -15,10 +15,10 @@ class NullFrameProcessor(IFrameProcessor[FrameData, FrameData]):
         self._ready = True
         return output_data
 
-    def live(self) -> bool:
+    def _get_live(self) -> bool:
         return True
 
-    def ready(self) -> bool:
+    def _get_ready(self) -> bool:
         return self._ready
 
 

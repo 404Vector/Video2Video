@@ -14,19 +14,30 @@ class IFrameProcessor(Generic[IT, OT], metaclass=ABCMeta):
     async def __call__(self, input_data: IT) -> OT:
         ...
 
+    @abstractmethod
+    def _get_ready(self) -> bool:
+        ...
+
+    @abstractmethod
+    def _get_live(self) -> bool:
+        ...
+
     @property
     def id(self):
+        assert self._id is not None
         return self._id
 
     @property
-    @abstractmethod
     def live(self) -> bool:
-        ...
+        __val = self._get_live()
+        assert type(__val) is bool
+        return __val
 
     @property
-    @abstractmethod
     def ready(self) -> bool:
-        ...
+        __val = self._get_ready()
+        assert type(__val) is bool
+        return __val
 
 
 __all__ = [IFrameProcessor.__name__]
