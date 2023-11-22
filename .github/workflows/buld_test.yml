@@ -1,0 +1,28 @@
+name: Build Test
+
+on: [pull_request]
+
+jobs:
+  deploy:
+
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: ["3.9", "3.10", "3.11"]
+
+    steps:
+    - uses: actions/checkout@v3
+    - name: Set up Python ${{ matrix.python-version }}
+      uses: actions/setup-python@v3
+      with:
+        python-version: ${{ matrix.python-version }}
+    - name: Build Package python-version
+      run: |
+        echo "$GITHUB_ACTION_TAG_NAME"
+        python build_package_version.py -i v2v/__init__.py
+    - name: Install dependencies
+      run: |
+        pip install build
+    - name: Build package
+      run: python -m build
