@@ -21,3 +21,4 @@ from ._frame_organizer_ import *
 from ._null_frame_processor_ import *
 from ._null_frame_processor_pool_ import *
 from ._video2video_processor_ import *
+from ._mp_video2image_processor_ import *
