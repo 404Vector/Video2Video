@@ -1,3 +1,4 @@
 setuptools
 ffmpeg-python
+uvloop
 numpy
