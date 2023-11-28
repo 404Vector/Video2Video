@@ -32,7 +32,7 @@ def job_video2audio(v2a_proc: AudioExtractor):
     v2a_proc.run()
 
 
-def job_image2image(
+async def job_image2image(
     i2i_pool: IFrameProcessorPool,
     dequeue: Queue,
     enqueue: Queue,
@@ -42,7 +42,7 @@ def job_image2image(
         if frame_data is None:
             dequeue.put(None)
             break
-        result = asyncio.run(i2i_pool(frame_data=frame_data))
+        result = await i2i_pool(frame_data=frame_data)
         enqueue.put(result)
     enqueue.put(None)  # end of work
 
@@ -153,8 +153,7 @@ class Video2VideoProcessor:
                 enqueue=v2i_queue,
             ),
             *[
-                asyncio.to_thread(
-                    job_image2image,
+                job_image2image(
                     i2i_pool=image2image_pool,
                     dequeue=v2i_queue,
                     enqueue=i2i_queue,
