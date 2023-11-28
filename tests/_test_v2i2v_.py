@@ -1,9 +1,16 @@
 import asyncio
 import os
+from typing import List
 import unittest
 
 import numpy as np
-from v2v import Video2ImageProcessor, AudioExtractor, Image2VideoProcessor, AudioMerger
+from v2v import (
+    Video2ImageProcessor,
+    AudioExtractor,
+    Image2VideoProcessor,
+    AudioMerger,
+    FrameData,
+)
 from . import _config_ as config
 
 
@@ -23,11 +30,11 @@ class TestVideo2Image2VideoProcessor(unittest.TestCase):
             video_path=config.test_v2i2v["test_video_url"],
             ffmpeg_options_output=config.test_v2i2v["v2i_ffmpeg_options_output"],
         )
-        frames = []
+        frames: List[FrameData] = []
         while True:
-            frame = asyncio.run(v2ip())
+            frame = v2ip()
             frames.append(frame)
-            if frame.frame is None and frame.frame_id == -1:
+            if frame is None:
                 break
 
         v2ap = AudioExtractor(
@@ -48,14 +55,14 @@ class TestVideo2Image2VideoProcessor(unittest.TestCase):
         try:
             while True:
                 frame_data = frames.pop(0)
-                image = frame_data.frame
-                if frame_data.frame is not None:
+                if frame_data is not None:
+                    image = frame_data.frame
                     image = np.clip(
                         (image.astype(np.int32) - 32) * (128.0 / (128 - 32)), 0, 255
                     )
                     frame_data.frame = image
-                asyncio.run(i2vp(frame_data=frame_data))
-                if frame_data.frame is None and frame_data.frame_id == -1:
+                i2vp(frame_data=frame_data)
+                if frame_data is None:
                     break
         except StopIteration:
             pass
