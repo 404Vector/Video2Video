@@ -24,15 +24,12 @@ class Video2ImageProcessor:
         self._progress = 0
         self._is_done = False
 
-    async def __call__(self) -> FrameData:
+    def __call__(self) -> FrameData:
         assert self._is_done is False
-        frame = await asyncio.to_thread(
-            functools.partial(
-                read_frame_from_process,
-                process=self._sub_processor,
-                width=self._video_info.frame_width,
-                height=self._video_info.frame_height,
-            )
+        frame = read_frame_from_process(
+            process=self._sub_processor,
+            width=self._video_info.frame_width,
+            height=self._video_info.frame_height,
         )
 
         if frame is not None:
@@ -40,7 +37,7 @@ class Video2ImageProcessor:
             self._progress += 1
         else:
             self._is_done = True
-            frame_data = FrameData(frame_id=-1, frame=None)
+            frame_data = None
             self._sub_processor.stdout.close()
             self._sub_processor.wait()
         return frame_data

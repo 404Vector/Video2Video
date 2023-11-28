@@ -23,8 +23,8 @@ class TestVideo2ImageProcessor(unittest.TestCase):
 
         progress = 0
         while True:
-            frame_data = asyncio.run(v2ip())
-            if frame_data.frame is None and frame_data.frame_id == -1:
+            frame_data = v2ip()
+            if frame_data is None:
                 break
             self.assertEqual(progress, frame_data.frame_id)
             progress += 1

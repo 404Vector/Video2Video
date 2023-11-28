@@ -27,7 +27,7 @@ class TestImage2VideoProcessor(unittest.TestCase):
             FrameData(fid, (np.ones((height, width, 3)) * c).astype(np.uint8))
             for fid, c in enumerate(colors)
         ]
-        frame_datas.append(FrameData(-1, None))  # end of the frame
+        frame_datas.append(None)  # end of the frame
         i2vp = Image2VideoProcessor(
             dst_video_path=config.test_i2vp["dst_video_path"],
             width=width,
@@ -38,8 +38,8 @@ class TestImage2VideoProcessor(unittest.TestCase):
         )
         while True:
             frame_data = frame_datas.pop(0)
-            asyncio.run(i2vp(frame_data))
-            if frame_data.frame is None and frame_data.frame_id == -1:
+            i2vp(frame_data)
+            if frame_data is None:
                 break
         self.assertEqual(
             os.path.exists(i2vp.dst_video_path),
