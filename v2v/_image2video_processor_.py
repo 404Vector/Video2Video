@@ -39,16 +39,11 @@ class Image2VideoProcessor:
         self._progress = 0
         self._is_done = False
 
-    async def __call__(self, frame_data: FrameData):
+    def __call__(self, frame_data: FrameData):
         assert self._is_done is False
-        if frame_data.frame is not None:
+        if frame_data is not None:
             assert self._progress == frame_data.frame_id
-            await asyncio.to_thread(
-                functools.partial(
-                    self._sub_processor.stdin.write,
-                    frame_data.frame.astype(np.uint8).tobytes(),
-                )
-            )
+            self._sub_processor.stdin.write(frame_data.frame.astype(np.uint8).tobytes())
             self._progress += 1
         else:
             self._is_done = True
