@@ -93,15 +93,4 @@ test_v2v = {
     "dst_video_audio_path": os.path.join(
         PROJECT_DIR, "_TEMP_VIDEO_AUDIO_FOR_TEST_.mov"
     ),
-    "v2i_ffmpeg_options_output": {
-        "ss": "00:00:00",
-        "t": "00:00:01",
-    },
-    "v2a_ffmpeg_options_output": {
-        "ss": "00:00:00",
-        "t": "00:00:01",
-    },
-    "i2v_ffmpeg_options_input": {},
-    "i2v_ffmpeg_options_output": {},
-    "va2v_ffmpeg_options_output": {},
 }
