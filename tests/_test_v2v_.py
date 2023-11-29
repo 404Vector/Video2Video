@@ -22,15 +22,7 @@ class TestVideo2VideoProcessor(unittest.TestCase):
         async def __job():
             v2vp = Video2VideoProcessor(
                 input_video_path=config.test_v2v["test_video_url"],
-                temp_file_dir=config.PROJECT_DIR,
                 output_video_path=config.test_v2v["dst_video_audio_path"],
-                v2i_ffmpeg_options_output=config.test_v2v["v2i_ffmpeg_options_output"],
-                v2a_ffmpeg_options_output=config.test_v2v["v2a_ffmpeg_options_output"],
-                i2v_ffmpeg_options_input=config.test_v2v["i2v_ffmpeg_options_input"],
-                i2v_ffmpeg_options_output=config.test_v2v["i2v_ffmpeg_options_output"],
-                va2v_ffmpeg_options_output=config.test_v2v[
-                    "va2v_ffmpeg_options_output"
-                ],
             )
             await v2vp.async_run()
 
