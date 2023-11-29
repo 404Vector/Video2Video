@@ -46,22 +46,47 @@ def job_video2image(
     v2i_proc.wait()
 
 
-async def job_image2image(
+def job_image2image(
     i2i_pool: IFrameProcessorPool,
     dequeue: Queue,
     enqueue: Queue,
     progress: ThreadSafeProgress,
 ):
-    while True:
-        frame_data: FrameData = await asyncio.to_thread(dequeue.get)
-        if frame_data is None:
-            dequeue.put(None)
-            break
-        result = await i2i_pool(frame_data=frame_data)
-        # print(f"--------i2i[{frame_data.frame_id:05d}]")
-        enqueue.put(result)
-        progress.change(1)
-    enqueue.put(None)  # end of work
+    loop = asyncio.new_event_loop()
+    number_of_process = len(i2i_pool)
+
+    async def _processing(
+        i2i_pool: IFrameProcessorPool,
+        dequeue: Queue,
+        enqueue: Queue,
+        progress: ThreadSafeProgress,
+    ):
+        while True:
+            frame_data: FrameData = dequeue.get()
+            if frame_data is None:
+                dequeue.put(None)
+                break
+            result = await i2i_pool(frame_data=frame_data)
+            # print(f"--------i2i[{frame_data.frame_id:05d}]")
+            enqueue.put(result)
+            progress.change(1)
+        enqueue.put(None)  # end of work
+
+    loop.run_until_complete(
+        asyncio.gather(
+            *[
+                loop.create_task(
+                    _processing(
+                        i2i_pool=i2i_pool,
+                        dequeue=dequeue,
+                        enqueue=enqueue,
+                        progress=progress,
+                    )
+                )
+                for _ in range(number_of_process)
+            ]
+        )
+    )
 
 
 def job_image2video(
@@ -150,17 +175,13 @@ class Video2VideoProcessor:
                 enqueue=v2i_queue,
                 progress=v2i_progress,
             ),
-            *[
-                asyncio.create_task(
-                    job_image2image(
-                        i2i_pool=image2image_pool,
-                        dequeue=v2i_queue,
-                        enqueue=i2v_queue,
-                        progress=i2i_progress,
-                    )
-                )
-                for _ in range(len(image2image_pool))
-            ],
+            asyncio.to_thread(
+                job_image2image,
+                i2i_pool=image2image_pool,
+                dequeue=v2i_queue,
+                enqueue=i2v_queue,
+                progress=i2i_progress,
+            ),
             asyncio.to_thread(
                 job_image2video,
                 i2v_proc=image2video_proc,
