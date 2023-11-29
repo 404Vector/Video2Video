@@ -1,10 +1,12 @@
 import subprocess
-from typing import Any, Dict, Literal, Optional, Union
+from typing import Any, Dict, Literal, Optional, Tuple, Union
 import numpy as np
 import ffmpeg
 
 
-def read_frame_from_process(process: Any, width: int, height: int, channel: int = 3):
+def read_frame_from_process(
+    process: subprocess.Popen, width: int, height: int, channel: int = 3
+):
     # Note: RGB24 == 3 bytes per pixel.
     frame_size = width * height * channel
     in_bytes = process.stdout.read(frame_size)
@@ -134,6 +136,47 @@ def create_i2v_process(
     return subprocess.Popen(pargs, stdin=subprocess.PIPE)
 
 
+def create_v2v_process(
+    video_path: str,
+    dst_video_path: str,
+    ffmpeg_log_level: str = "warning",
+    dst_frame_size: Optional[Tuple[int, int]] = None,
+    dst_fps: Optional[Union[str, float, int]] = None,
+) -> subprocess.Popen:
+    video_info = get_video_info_from_path(video_path=video_path)
+    org_frame_width = video_info["width"]
+    org_frame_height = video_info["height"]
+    org_fps = video_info["avg_frame_rate"]
+    dst_width = org_frame_width if dst_frame_size is None else dst_frame_size[0]
+    dst_height = org_frame_height if dst_frame_size is None else dst_frame_size[1]
+    dst_fps = org_fps if dst_fps is None else dst_fps
+    # extract frame from video
+    input_process_args = (
+        ffmpeg.input(video_path)
+        .output("pipe:", format="rawvideo", pix_fmt="rgb24", loglevel=ffmpeg_log_level)
+        .compile()
+    )
+    input_process = subprocess.Popen(input_process_args, stdout=subprocess.PIPE)
+
+    # merge frame and audio stream into video
+    i2v_stream = ffmpeg.input(
+        "pipe:",
+        format="rawvideo",
+        pix_fmt="rgb24",
+        s="{}x{}".format(dst_width, dst_height),
+        r=dst_fps,
+    )
+    v2a_stream = ffmpeg.input(video_path).audio
+    output_process_args = (
+        ffmpeg.concat(i2v_stream, v2a_stream, v=1, a=1)
+        .output(dst_video_path, pix_fmt="yuv420p", loglevel=ffmpeg_log_level)
+        .overwrite_output()
+        .compile()
+    )
+    output_process = subprocess.Popen(output_process_args, stdin=subprocess.PIPE)
+    return input_process, output_process
+
+
 __all__ = [
     read_frame_from_process.__name__,
     get_video_info_from_path.__name__,
@@ -141,4 +184,5 @@ __all__ = [
     create_v2a_process.__name__,
     create_i2v_process.__name__,
     create_va2v_process.__name__,
+    create_v2v_process.__name__,
 ]
