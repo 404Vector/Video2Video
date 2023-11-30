@@ -142,7 +142,11 @@ def create_v2v_process(
     ffmpeg_log_level: str = "warning",
     dst_frame_size: Optional[Tuple[int, int]] = None,
     dst_fps: Optional[Union[str, float, int]] = None,
+    dst_ffmpeg_options_output: Optional[dict] = None,
 ) -> subprocess.Popen:
+    output_kwargs: Dict[str, str] = {}
+    if dst_ffmpeg_options_output is not None:
+        output_kwargs.update(dst_ffmpeg_options_output)
     video_info = get_video_info_from_path(video_path=video_path)
     org_frame_width = video_info["width"]
     org_frame_height = video_info["height"]
@@ -150,12 +154,13 @@ def create_v2v_process(
     dst_width = org_frame_width if dst_frame_size is None else dst_frame_size[0]
     dst_height = org_frame_height if dst_frame_size is None else dst_frame_size[1]
     dst_fps = org_fps if dst_fps is None else dst_fps
+    video_stream = ffmpeg.input(video_path).video
+    audio_stream = ffmpeg.input(video_path).audio
+
     # extract frame from video
-    input_process_args = (
-        ffmpeg.input(video_path)
-        .output("pipe:", format="rawvideo", pix_fmt="rgb24", loglevel=ffmpeg_log_level)
-        .compile()
-    )
+    input_process_args = video_stream.output(
+        "pipe:", format="rawvideo", pix_fmt="rgb24", loglevel=ffmpeg_log_level
+    ).compile()
     input_process = subprocess.Popen(input_process_args, stdout=subprocess.PIPE)
 
     # merge frame and audio stream into video
@@ -166,10 +171,14 @@ def create_v2v_process(
         s="{}x{}".format(dst_width, dst_height),
         r=dst_fps,
     )
-    v2a_stream = ffmpeg.input(video_path).audio
     output_process_args = (
-        ffmpeg.concat(i2v_stream, v2a_stream, v=1, a=1)
-        .output(dst_video_path, pix_fmt="yuv420p", loglevel=ffmpeg_log_level)
+        ffmpeg.concat(i2v_stream, audio_stream, v=1, a=1)
+        .output(
+            dst_video_path,
+            pix_fmt="yuv420p",
+            loglevel=ffmpeg_log_level,
+            **output_kwargs,
+        )
         .overwrite_output()
         .compile()
     )
