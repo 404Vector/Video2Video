@@ -126,6 +126,7 @@ class Video2VideoProcessor:
         ),
         i2v_frame_size: Optional[Tuple[int, int]] = None,
         i2v_fps: Optional[Union[str, float, int]] = None,
+        dst_ffmpeg_options_output: Optional[dict] = None,
     ) -> None:
         self._id = create_uuid()
         self._input_video_path = input_video_path
@@ -136,6 +137,7 @@ class Video2VideoProcessor:
             dst_video_path=output_video_path,
             dst_fps=i2v_fps,
             dst_frame_size=i2v_frame_size,
+            dst_ffmpeg_options_output=dst_ffmpeg_options_output,
         )
 
         self._v2i_proc = v2ip
